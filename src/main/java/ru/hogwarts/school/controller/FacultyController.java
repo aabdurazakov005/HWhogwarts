@@ -58,4 +58,10 @@ public class FacultyController {
         return ResponseEntity.ok(faculties);
     }
 
+    @GetMapping("/search")
+    public ResponseEntity<List<Faculty>> searchFaculties(@RequestParam String searchTerm) {
+        List<Faculty> faculties = facultyService.getFacultiesByNameOrColor(searchTerm);
+        return ResponseEntity.ok(faculties);
+    }
+
 }
