@@ -1,10 +1,7 @@
 package ru.hogwarts.school.model;
-
 import jakarta.persistence.*;
-
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 @Entity
 @Table(name = "faculties")
@@ -22,7 +19,6 @@ public class Faculty {
     @OneToMany(mappedBy = "faculty", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Student> students = new ArrayList<>();
 
-    // Конструкторы
     public Faculty() {}
 
     public Faculty(Long id, String name, String color) {
@@ -31,7 +27,6 @@ public class Faculty {
         this.color = color;
     }
 
-    // Геттеры и сеттеры
     public Long getId() {
         return id;
     }
@@ -64,7 +59,6 @@ public class Faculty {
         this.students = students;
     }
 
-    // Вспомогательные методы для управления связью
     public void addStudent(Student student) {
         students.add(student);
         student.setFaculty(this);
@@ -75,7 +69,6 @@ public class Faculty {
         student.setFaculty(null);
     }
 
-    // equals и hashCode
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -96,7 +89,6 @@ public class Faculty {
         return result;
     }
 
-    // toString
     @Override
     public String toString() {
         return "Faculty{" +
