@@ -6,8 +6,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.service.FacultyService;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -63,5 +61,4 @@ public class FacultyController {
         List<Faculty> faculties = facultyService.getFacultiesByNameOrColor(searchTerm);
         return ResponseEntity.ok(faculties);
     }
-
 }
