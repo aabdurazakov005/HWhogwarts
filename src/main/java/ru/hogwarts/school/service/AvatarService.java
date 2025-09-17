@@ -2,6 +2,10 @@ package ru.hogwarts.school.service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import ru.hogwarts.school.model.Avatar;
 import ru.hogwarts.school.repository.AvatarRepository;
@@ -60,5 +64,20 @@ public class AvatarService {
             avatarRepository.deleteById(id);
             logger.info("Avatar deleted with ID: {}", id);
         }
+    }
+
+    public Page<Avatar> getAllAvatars(int page, int size) {
+        logger.info("Getting all avatars - page: {}, size: {}", page, size);
+
+        Pageable pageable = PageRequest.of(page, size, Sort.by("id").ascending());
+
+        Page<Avatar> avatarsPage = avatarRepository.findAll(pageable);
+
+        logger.debug("Found {} avatars on page {} of {}",
+                avatarsPage.getNumberOfElements(),
+                page,
+                avatarsPage.getTotalPages());
+
+        return avatarsPage;
     }
 }
