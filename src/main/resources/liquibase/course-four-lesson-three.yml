@@ -1,0 +1,214 @@
+
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: hogwarts
+      comment: Create initial tables for Hogwarts school
+      changes:
+        - createTable:
+            tableName: faculty
+            columns:
+              - column:
+                  name: id
+                  type: BIGSERIAL
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: VARCHAR(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: color
+                  type: VARCHAR(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_date
+                  type: TIMESTAMP
+                  defaultValueComputed: CURRENT_TIMESTAMP
+
+        - createTable:
+            tableName: student
+            columns:
+              - column:
+                  name: id
+                  type: BIGSERIAL
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: VARCHAR(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: age
+                  type: INTEGER
+                  constraints:
+                    nullable: false
+              - column:
+                  name: faculty_id
+                  type: BIGINT
+              - column:
+                  name: created_date
+                  type: TIMESTAMP
+                  defaultValueComputed: CURRENT_TIMESTAMP
+
+        - addForeignKeyConstraint:
+            baseTableName: student
+            baseColumnNames: faculty_id
+            constraintName: fk_student_faculty
+            referencedTableName: faculty
+            referencedColumnNames: id
+
+  - changeSet:
+      id: 2
+      author: hogwarts
+      comment: Add constraints for student and faculty tables
+      changes:
+        - addNotNullConstraint:
+            tableName: student
+            columnName: name
+            columnDataType: VARCHAR(100)
+
+        - addUniqueConstraint:
+            tableName: student
+            columnNames: name
+            constraintName: uk_student_name
+
+        - addCheckConstraint:
+            tableName: student
+            constraintName: ck_student_age_min
+            constraintBody: age >= 16
+
+        - addDefaultValue:
+            tableName: student
+            columnName: age
+            defaultValue: 20
+
+        - addUniqueConstraint:
+            tableName: faculty
+            columnNames: name, color
+            constraintName: uk_faculty_name_color
+
+  - changeSet:
+      id: 3
+      author: hogwarts
+      comment: Create indexes for student name and faculty name_color search optimization
+      changes:
+        - createIndex:
+            indexName: idx_student_name
+            tableName: student
+            columns:
+              - column:
+                  name: name
+            unique: false
+
+        - createIndex:
+            indexName: idx_faculty_name_color
+            tableName: faculty
+            columns:
+              - column:
+                  name: name
+              - column:
+                  name: color
+            unique: false
+
+  - changeSet:
+      id: 4
+      author: hogwarts
+      comment: Insert initial test data
+      changes:
+        - insert:
+            tableName: faculty
+            columns:
+              - column:
+                  name: name
+                  value: Gryffindor
+              - column:
+                  name: color
+                  value: red
+
+        - insert:
+            tableName: faculty
+            columns:
+              - column:
+                  name: name
+                  value: Slytherin
+              - column:
+                  name: color
+                  value: green
+
+        - insert:
+            tableName: faculty
+            columns:
+              - column:
+                  name: name
+                  value: Hufflepuff
+              - column:
+                  name: color
+                  value: yellow
+
+        - insert:
+            tableName: faculty
+            columns:
+              - column:
+                  name: name
+                  value: Ravenclaw
+              - column:
+                  name: color
+                  value: blue
+
+        - insert:
+            tableName: student
+            columns:
+              - column:
+                  name: name
+                  value: Harry Potter
+              - column:
+                  name: age
+                  value: 17
+              - column:
+                  name: faculty_id
+                  value: 1
+
+        - insert:
+            tableName: student
+            columns:
+              - column:
+                  name: name
+                  value: Hermione Granger
+              - column:
+                  name: age
+                  value: 17
+              - column:
+                  name: faculty_id
+                  value: 1
+
+        - insert:
+            tableName: student
+            columns:
+              - column:
+                  name: name
+                  value: Draco Malfoy
+              - column:
+                  name: age
+                  value: 17
+              - column:
+                  name: faculty_id
+                  value: 2
+
+        - insert:
+            tableName: student
+            columns:
+              - column:
+                  name: name
+                  value: Luna Lovegood
+              - column:
+                  name: age
+                  value: 16
+              - column:
+                  name: faculty_id
+                  value: 4
