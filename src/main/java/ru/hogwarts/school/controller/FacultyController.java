@@ -175,4 +175,18 @@ public class FacultyController {
         logger.info("Faculty deleted successfully with ID: {}", id);
         return ResponseEntity.ok().build();
     }
+
+    @GetMapping("/longest-name")
+    public ResponseEntity<String> getFacultyWithLongestName() {
+        logger.info("Was invoked GET method to get faculty with longest name");
+
+        String longestName = facultyService.getFacultyWithLongestName();
+        if (longestName == null || longestName.isEmpty()) {
+            logger.info("No faculties found");
+            return ResponseEntity.notFound().build();
+        }
+
+        logger.debug("Longest faculty name: {}", longestName);
+        return ResponseEntity.ok(longestName);
+    }
 }

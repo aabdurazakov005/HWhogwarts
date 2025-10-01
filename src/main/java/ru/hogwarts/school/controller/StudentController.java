@@ -305,4 +305,47 @@ public class StudentController {
         logger.info("Student age updated successfully for ID: {}", id);
         return ResponseEntity.ok(updatedStudent);
     }
+
+    @GetMapping("/names-starting-with-a")
+    public ResponseEntity<List<String>> getStudentNamesStartingWithA() {
+        logger.info("Was invoked GET method to get student names starting with A");
+
+        List<String> names = studentService.getStudentNamesStartingWithA();
+        logger.debug("Found {} student names starting with A", names.size());
+        return ResponseEntity.ok(names);
+    }
+
+    @GetMapping("/average-age-stream")
+    public ResponseEntity<Double> getAverageAgeWithStream() {
+        logger.info("Was invoked GET method to get average age using stream");
+
+        Double averageAge = studentService.getAverageAgeWithStream();
+        logger.debug("Average student age (stream): {}", averageAge);
+        return ResponseEntity.ok(averageAge);
+    }
+
+    @GetMapping("/math/sum-optimized")
+    public ResponseEntity<Long> calculateSumOptimized() {
+        logger.info("Was invoked GET method to calculate optimized sum");
+        long startTime = System.currentTimeMillis();
+        long n = 1_000_000L;
+        long sum = n * (1 + n) / 2;
+        long endTime = System.currentTimeMillis();
+        long duration = endTime - startTime;
+        logger.info("Sum calculation completed in {} ms. Result: {}", duration, sum);
+        return ResponseEntity.ok(sum);
+    }
+
+    @GetMapping("/math/sum-original")
+    public ResponseEntity<Integer> calculateSumOriginal() {
+        logger.info("Was invoked GET method to calculate original sum");
+        long startTime = System.currentTimeMillis();
+        int sum = java.util.stream.Stream.iterate(1, a -> a + 1)
+                .limit(1_000_000)
+                .reduce(0, (a, b) -> a + b);
+        long endTime = System.currentTimeMillis();
+        long duration = endTime - startTime;
+        logger.info("Original sum calculation completed in {} ms. Result: {}", duration, sum);
+        return ResponseEntity.ok(sum);
+    }
 }

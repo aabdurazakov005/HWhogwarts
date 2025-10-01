@@ -12,6 +12,7 @@ import ru.hogwarts.school.repository.StudentRepository;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class StudentService {
@@ -166,5 +167,38 @@ public class StudentService {
     public Avatar findAvatar(Long studentId) {
         logger.info("Finding avatar for student ID: {}", studentId);
         return null;
+    }
+
+    public List<String> getStudentNamesStartingWithA() {
+        logger.info("Was invoked method for get student names starting with A");
+
+        List<String> names = studentRepository.findAll().stream()
+                .map(Student::getName)
+                .filter(name -> name.toUpperCase().startsWith("А")) // Русская А
+                .map(String::toUpperCase)
+                .sorted()
+                .collect(Collectors.toList());
+
+        logger.debug("Found {} student names starting with A", names.size());
+        return names;
+    }
+
+    public Double getAverageAgeWithStream() {
+        logger.info("Was invoked method for get average age using stream");
+
+        List<Student> students = studentRepository.findAll();
+
+        if (students.isEmpty()) {
+            logger.debug("No students found for average age calculation");
+            return 0.0;
+        }
+
+        Double averageAge = students.stream()
+                .mapToInt(Student::getAge)
+                .average()
+                .orElse(0.0);
+
+        logger.debug("Average age calculated: {}", averageAge);
+        return averageAge;
     }
 }
