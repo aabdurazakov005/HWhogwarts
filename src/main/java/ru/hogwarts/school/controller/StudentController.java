@@ -348,4 +348,20 @@ public class StudentController {
         logger.info("Original sum calculation completed in {} ms. Result: {}", duration, sum);
         return ResponseEntity.ok(sum);
     }
+
+    @GetMapping("/print-parallel")
+    public ResponseEntity<String> printStudentsParallel() {
+        logger.info("Was invoked GET method to print students in parallel");
+
+        studentService.printStudentsParallel();
+        return ResponseEntity.ok("Students printed in parallel mode");
+    }
+
+    @GetMapping("/print-synchronized")
+    public ResponseEntity<String> printStudentsSynchronized() {
+        logger.info("Was invoked GET method to print students in synchronized mode");
+
+        studentService.printStudentsSynchronized();
+        return ResponseEntity.ok("Students printed in synchronized mode");
+    }
 }
